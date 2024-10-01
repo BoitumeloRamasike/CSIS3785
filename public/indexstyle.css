@@ -1,0 +1,152 @@
+body {
+    /* background-color: #f0f0f0; */
+    /* font-family: Arial, sans-serif; */
+    text-align: center;
+    width: auto; 
+}
+.header {
+    background-color: #333;
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+}
+.top-right {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+.top-right button {
+    margin-left: 16px;
+    font-size: 16px;
+}
+.header h1 {
+    margin: 0;
+}
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn 1s ease-in-out;
+}
+input {
+    border-radius: 15px; /* Adjust the value to round the corners more or less */
+    background-color: #f0f0f0; /* Set the desired background color */
+    border: 1px solid #ccc; /* Optional: Set a border */
+    padding: 10px; /* Optional: Add some padding */
+    font-size: 16px; /* Optional: Set the font size */
+}
+button {
+    background-color: #4CAF50;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.button:hover {
+    background-color: #3e8e41;
+}
+.image {
+    width: 200px;
+    height: 200px;
+    margin: 20px;
+    border-radius: 50%;
+    position: relative;
+    align-items: center;
+}
+
+.features-testimonials {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+    max-width: 1200px;
+    margin-bottom: 20px;
+    margin: 0 auto;
+}
+
+.features, .testimonials {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 45%;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.features ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.features li {
+    background-color: #e0f7fa;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+.testimonial {
+    background-color: #ffecb3;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+.footer {
+    background-color: #333;
+    color: white;
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 20px;
+}
+
+.social-media a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+    font-size: 1.2em;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Base styles for the image */
+.responsive-image {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+    max-width: 100%;
+}
+
+/* Additional styles for different screen sizes using media queries */
+
+/* Styles for small devices (phones) */
+@media (max-width: 600px) {
+    .responsive-image {
+        width: 100%; /* Ensure the image fits within the screen */
+    }
+}
+
+/* Styles for medium devices (tablets) */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .responsive-image {
+        width: 100%; /* Adjust as necessary */
+    }
+}
+
+/* Styles for large devices (laptops/desktops) */
+@media (min-width: 1025px) {
+    .responsive-image {
+        width: 100%; /* Adjust as necessary */
+    }
+}

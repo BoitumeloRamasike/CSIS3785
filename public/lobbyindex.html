@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Room</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="lobby.css"/>
+    <style>
+      .garden {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        border: 5px solid #ccc;
+        border-radius: 10px;
+      }
+
+      .ball {
+        position: absolute;
+        top: 90px;
+        left: 90px;
+        width: 20px;
+        height: 20px;
+        background: green;
+        border-radius: 100%;
+      }
+    </style>
+  <link rel="stylesheet" href="grid.css"/>  </head>
+
+  <body>
+    <div class="header">
+      <h1>Maze Game</h1>
+    </div>
+    <div id="main-menu">
+      <button id="create-room">Start a Room</button>
+      <button id="join-room" href="player.html">Join a Room</button>
+    </div>
+
+    <button class="back-button" onclick="location.href='homepage.html'">Back</button>
+
+    <div id="join-form" style="display: none">
+      <input type="text" id="player-name" placeholder="Enter your name" />
+      <input type="text" id="room-code" placeholder="Enter room code" />
+      <button id="submit-join">Join</button>
+    </div>
+
+    <div id="lobby" style="display: none">
+      <h2>Lobby</h2>
+      <p>Room Code: <span id="room-code-display"></span></p>
+      <p id="room-status"></p>
+      <h3>Players:</h3>
+      <ul id="player-list"></ul>
+      <!--CHANGED-->
+      <div class="custom-select">
+        <select id="diffSelect">
+          <option value="10">Easy</option>
+          <option value="15">Medium</option>
+          <option value="25">Hard</option>
+          <option value="38">Extreme</option>
+        </select>
+      </div>
+      <button id="start-game" style="display: none">Start Game</button>
+    </div>
+    
+    <div id="game" style="display: none">
+      <div class="game-container">
+        <div class="sidelist">
+          <h3>Players:</h3>
+          <ul id="player-list"></ul>
+        </div>
+    
+        <div id="center">
+          <div id="game-maze">
+            <div id="maze">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="gyroscope-data"></div>
+    </div>    
+
+    <div class="footer">
+      <p>Follow us on social media!</p>
+      <div class="social-media">
+          <a href="https://facebook.com" target="_blank">Facebook</a>
+          <a href="https://twitter.com" target="_blank">Twitter</a>
+          <a href="https://instagram.com" target="_blank">Instagram</a>
+      </div>
+  </div>
+    <script src="client.js"></script>
+    <script src="ball.js" defer></script>
+  </body>
+</html>
