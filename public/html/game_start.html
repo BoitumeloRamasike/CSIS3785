@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Room</title>
+  <script src="/socket.io/socket.io.js"></script>
+
+  <link rel="stylesheet" href="../css/game_start.css" />
+  <link rel="stylesheet" href="../css/grid.css" />
+</head>
+
+<body>
+<img src="../images/welcome_to_the_game.png" class="center" alt="welcome"></img>
+
+<!-- Main Menu -->
+<div id="main-menu">
+  <button id="create-room" style="background-color: black; width: 120px; height: 60px; font-size: medium; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Start a Room</button>
+  <button id="join-room" style="background-color: black; width: 120px; height: 60px; font-size: medium; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Join a Room</button>
+</div>
+
+<!-- Join -->
+<div id="join-form" style="display: none">
+  <input type="text" id="player-name" placeholder="Enter your name" style="width: 200px; height: 40px;"/>
+  <input type="text" id="room-code" placeholder="Enter room code"  style="width: 200px; height: 40px; text-transform: uppercase;"/>
+  <button id="submit-join" style="background-color: black; width: 60px; height: 40px; font-size: medium; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Join</button>
+</div>
+
+<!-- Lobby -->
+<div id="lobby" style="display: none">
+  <h2 style="background-color: #fff; font-size: xx-large;" id="lobby-title">Lobby</h2>
+  <p style="font-size: x-large;">Room Code: <span id="room-code-display"></span></p>
+  <p id="room-status"></p>
+  <h3 style="font-size: x-large;">Players:</h3>
+  <ul id="player-list"></ul>
+  <button id="start-game" style="background-color: black; width: 200px; height: 60px; font-size: medium; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; display: none;">Start Game</button>
+</div>
+
+<!-- Game Start Notification -->
+<h2 id="game-start-title" style="display: none">Game Started!</h2>
+
+<!-- Game Area -->
+<div id="game" style="display: none">
+  <div id="center">
+    <div id="game">
+      <div id="maze"></div>
+    </div>
+  </div>
+  <div id="gyroscope-data" style="display: none"></div>
+</div>
+
+<div id="buffer">
+  <div id="ballXCoordinate"></div>
+  <div id="ballYCoordinate"></div>
+  <div id="gyroRadius"></div>
+</div>
+
+<div id="container">
+  <div id="ball"></div>
+</div>
+
+
+<!-- Game Logic Script -->
+<script src="../js/gamelogic.js"></script>
+
+<script src="../js/client.js"></script>
+<script src="../js/ball.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.9.3/tsparticles.confetti.bundle.min.js"></script>
+
+</body>
+</html>

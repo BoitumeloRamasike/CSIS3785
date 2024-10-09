@@ -1,29 +1,32 @@
 "use strict";
 
 const express = require("express");
-const app = express();
-const http = require("http").createServer(app);
-const io = require("socket.io")(http);
+const app = express(); //Used to serve static files and handle web server functionality.
+const http = require("http").createServer(app); //Creates a basic HTTP server.
+const io = require("socket.io")(http); //Adds real-time, bidirectional communication between the server and players.
 
 app.use(express.static("public"));
 
-const rooms = new Map();
+//Game Variables
+const rooms = new Map(); //Stores information about game rooms. Each room contains data such as the host and players.
 const MAX_PLAYERS = 4;
-let gryoscopeGlobalData = {};
+let gryoscopeGlobalData = {}; //Stores gyroscope data from all players in each room.
 
 let prevRes = {
   gamma: 0,
   beta: 0,
-};
+}; //Keeps track of the last gyroscope data for smoother transitions or comparison between frames
 
+//Socket.IO Connection
 io.on("connection", (socket) => {
   socket.on("createRoom", () => {
-    const roomCode = generateRoomCode();
+    const roomCode = generateRoomCode(); //unique room code is generated
     rooms.set(roomCode, { host: socket.id, players: [] });
-    socket.join(roomCode);
+    socket.join(roomCode); //The player is automatically added to the room
     socket.emit("roomCreated", roomCode);
-  });
+  }); // Room Creation
 
+//Joining a Room
   socket.on("joinRoom", ({ name, roomCode }) => {
     const room = rooms.get(roomCode);
     if (room) {
@@ -51,6 +54,7 @@ io.on("connection", (socket) => {
     }
   });
 
+//Starting the Game
   socket.on("startGame", (roomCode) => {
     const room = rooms.get(roomCode);
     if (room && room.host === socket.id) {
@@ -58,6 +62,7 @@ io.on("connection", (socket) => {
     }
   });
 
+//Transmitting Game Map
   socket.on("transmitMap", ({ map, roomCode }) => {
     const room = rooms.get(roomCode);
     let column = Math.random();
@@ -66,6 +71,7 @@ io.on("connection", (socket) => {
     io.to(roomCode).emit("receieveMap", { map, room, column, row, roomCode });
   });
 
+//Handling Gyroscope Data
   socket.on("gyroscopeData", ({ roomCode, data }) => {
     let res = { gamma: 0, beta: 0 };
     const room = rooms.get(roomCode);
@@ -100,6 +106,7 @@ io.on("connection", (socket) => {
     }
   });
 
+//Player Disconnection
   socket.on("disconnect", () => {
     rooms.forEach((room, roomCode) => {
       const playerIndex = room.players.findIndex((p) => p.id === socket.id);
@@ -113,12 +120,13 @@ io.on("connection", (socket) => {
   });
 });
 
+//Room Code Generation
 function generateRoomCode() {
   return Math.random().toString(36).substring(2, 6).toUpperCase();
 }
 
-const PORT = process.env.PORT || 1337;
-
+// Server Start
+const PORT = process.env.PORT || 3000;
 http.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

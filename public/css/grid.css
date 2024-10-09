@@ -210,7 +210,7 @@ body {
     width: 15px;
     height: 15px;
     border-radius: 20%;
-    background-image: url('images/plus_two.png');
+    background-image: url('../images/plus_two.png');
     background-size: cover; /* Adjust as needed */
     background-repeat: no-repeat;
     margin-top: -9px;
@@ -222,7 +222,7 @@ body {
     width: 15px;
     height: 15px;
     border-radius: 20%;
-    background-image: url('images/plus_four.png');
+    background-image: url('../images/plus_four.png');
     background-size: cover; /* Adjust as needed */
     background-repeat: no-repeat;
     margin-top: -9px;
@@ -234,7 +234,7 @@ body {
     width: 10px;
     height: 10px;
     border-radius: 20%;
-    background-image: url('images/reverse.png');
+    background-image: url('../images/reverse.png');
     background-size: cover; /* Adjust as needed */
     background-repeat: no-repeat;
     margin-top: -9px;
@@ -246,7 +246,7 @@ body {
     width: 15px;
     height: 15px;
     border-radius: 20%;
-    background-image: url('images/skip.png');
+    background-image: url('../images/skip.png');
     background-size: cover; /* Adjust as needed */
     background-repeat: no-repeat;
     margin-top: -9px;

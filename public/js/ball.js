@@ -1,31 +1,35 @@
+//Global Variables
 let colors = ["red", "green", "blue", "purple"];
 let softColors = ["red", "green", "blue", "purple"];
-let key; 
+let key;
+
+//Helper Functions
 
 Math.minmax = (value, limit) => {
   return Math.max(Math.min(value, limit), -limit);
-};
+}; // It makes sure that the value is not larger than limit and not smaller than -limit.
 
+//Distance Calculation
 const distance2D = (p1, p2) => {
   return Math.sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2);
-};
+}; //calculates the distance between two points using the Pythagorean theorem.
 
-// Angle between the two points
+// Angle Calculation
 const getAngle = (p1, p2) => {
   let angle = Math.atan((p2.y - p1.y) / (p2.x - p1.x));
   if (p2.x - p1.x < 0) angle += Math.PI;
   return angle;
-};
+}; // calculates the angle between two points, p1 and p2, using atan (arctangent)
 
-// The closest a ball and a wall cap can be
+//Ball and Wall Interactions
+
+// Closest Point Between Ball and Wall
 const closestItCanBe = (cap, ball) => {
   let angle = getAngle(cap, ball);
-
   const deltaX = Math.cos(angle) * (wallW / 2 + ballSize / 2);
   const deltaY = Math.sin(angle) * (wallW / 2 + ballSize / 2);
-
   return { x: cap.x + deltaX, y: cap.y + deltaY };
-};
+}; //This function computes the closest position the ball can be to the wall without passing through.
 
 // Roll the ball around the wall cap
 const rollAroundCap = (cap, ball) => {
@@ -39,12 +43,10 @@ const rollAroundCap = (cap, ball) => {
     { x: 0, y: 0 },
     { x: ball.velocityX, y: ball.velocityY }
   );
-  const velocityMagnitudeDiagonalToTheImpact =
-    Math.sin(impactHeadingAngle) * velocityMagnitude;
+
+  const velocityMagnitudeDiagonalToTheImpact = Math.sin(impactHeadingAngle) * velocityMagnitude;
   const closestDistance = wallW / 2 + ballSize / 2;
-  const rotationAngle = Math.atan(
-    velocityMagnitudeDiagonalToTheImpact / closestDistance
-  );
+  const rotationAngle = Math.atan(velocityMagnitudeDiagonalToTheImpact / closestDistance);
 
   const deltaFromCap = {
     x: Math.cos(impactAngle + Math.PI - rotationAngle) * closestDistance,
@@ -59,9 +61,12 @@ const rollAroundCap = (cap, ball) => {
   const nextY = y + velocityY;
 
   return { x, y, velocityX, velocityY, nextX, nextY };
-};
+};//When a ball hits the corner or cap of a wall, it will "roll" around it, changing its velocity
+ //and position. This function calculates that effect, ensuring the ball bounces or rolls around
+ //smoothly instead of getting stuck.
 
-// Decreases the absolute value of a number but keeps it's sign, doesn't go below abs 0
+// Slowing the Ball
+//Decreases the absolute value of a number but keeps it's sign, doesn't go below abs 0
 const slow = (number, difference) => {
   if (Math.abs(number) <= difference) return 0;
   if (number > difference) return number - difference;
@@ -70,6 +75,7 @@ const slow = (number, difference) => {
 
 const mazeElement = document.getElementById("maze");
 
+// Game State Variables
 let hardMode = false;
 let previousTimestamp;
 let gameInProgress;
@@ -80,11 +86,11 @@ let accelerationY;
 let frictionX;
 let frictionY;
 
+//Game Configuration
 const pathW = 25; // Path width
 const wallW = 10; // Wall width
 const ballSize = 10; // Width and height of the ball
 const holeSize = 18;
-
 const debugMode = false;
 
 let balls = [];
@@ -108,6 +114,7 @@ let mapData,
   reverse_holes,
   skip_holes;
 
+//Socket.IO for Real-Time Multiplayer
 socket.on("receieveMap", ({ map, room, column, row, roomCode }) => {
   mazeData = map;
   currRoom = roomCode;
@@ -131,7 +138,6 @@ socket.on("receieveMap", ({ map, room, column, row, roomCode }) => {
           height: ${length}px;
           transform: rotate(${horizontal ? -90 : 0}deg);
           `;
-
     mazeElement.appendChild(wall);
   });
 
@@ -231,6 +237,7 @@ socket.on("receieveMap", ({ map, room, column, row, roomCode }) => {
   });
 });
 
+//Handling Ball Movement with Gyroscope Data
 socket.on("updateBall", ({ data, host }) => {
   if (data === null) {
     console.log("no data");
@@ -305,6 +312,7 @@ function updateThing(garden, ball, beta, gamma) {
   ball.style.top = `${(maxX * x) / 180 - 10}px`; // rotating device around the x axis moves the ball vertically
 }
 
+//Resetting the Game
 function resetGame(room) {
   previousTimestamp = undefined;
   gameInProgress = false;
@@ -348,6 +356,23 @@ function resetGame(room) {
     });
   }
 }
+
+// Add event listeners for arrow key presses
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'ArrowUp') {
+      key = 'ArrowUp';
+ } else if (event.key === 'ArrowDown') {
+    key = 'ArrowDown';
+  } else if (event.key === 'ArrowLeft') {
+    key = 'ArrowLeft';
+  } else if (event.key === 'ArrowRight') {
+    key = 'ArrowRight';
+  }
+});
+
+document.addEventListener('keyup', () => {
+  key = null;
+});
 
 function main(timestamp) {
   // It is possible to reset the game mid-game. This case the look should stop
@@ -594,7 +619,9 @@ function main(timestamp) {
               }
             }
           }
-        });
+        }
+
+        );
 
         holes.forEach((hole, hi) => {
           const distance = distance2D(hole, {
@@ -615,6 +642,7 @@ function main(timestamp) {
           }
         });
 
+//powerups
         plus_two_holes.forEach((hole, hi) => {
           const distance = distance2D(hole, {
             x: ball.nextX,
@@ -646,8 +674,8 @@ function main(timestamp) {
           });
 
           if (distance <= holeSize / 2) {
-            ball.velocityX = -1.5 * ball.velocityX;
-            ball.velocityY = -1.5 * ball.velocityY;
+                      ball.velocityX = 0;
+                      ball.velocityY = 0;
           }
         });
 
@@ -663,15 +691,15 @@ function main(timestamp) {
           }
         });
 
-        if (key === "ArrowUp") {
-          ball.velocityY = Math.max(ball.velocityY - 0.25, -maxVelocity);
-        } else if (key === "ArrowDown") {
-          ball.velocityY = Math.min(ball.velocityY + 0.25, maxVelocity);
-        } else if (key === "ArrowLeft") {
-          ball.velocityX = Math.max(ball.velocityX - 0.25, -maxVelocity);
-        } else if (key === "ArrowRight") {
-          ball.velocityX = Math.min(ball.velocityX + 0.25, maxVelocity);
-        }
+        if (key === 'ArrowUp') {
+                 ball.velocityY = Math.max(ball.velocityY - 0.25, -maxVelocity);
+                } else if (key === 'ArrowDown') {
+                  ball.velocityY = Math.min(ball.velocityY + 0.25, maxVelocity);
+                } else if (key === 'ArrowLeft') {
+                  ball.velocityX = Math.max(ball.velocityX - 0.25, -maxVelocity);
+                } else if (key === 'ArrowRight') {
+                  ball.velocityX = Math.min(ball.velocityX + 0.25, maxVelocity);
+                }
 
         // Adjust ball metadata
         ball.x = ball.x + ball.velocityX;
@@ -723,3 +751,5 @@ function main(timestamp) {
     } else throw error;
   }
 }
+
+
